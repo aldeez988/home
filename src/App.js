@@ -3,9 +3,11 @@ import Joke from './Joke';
 import Stories from './Stories'
 import Tasks from './Tasks';
 import Gallery from './Gallery';
+import Matrix from './Matrix';
 
 const App = () => {
   const [userQuery, setUserQuery] = useState('');
+  const [showGallery, setShowGallery] = useState(true);
   const updateUserQuery = event => {
     console.log('userQuery', userQuery);
     setUserQuery(event.target.value);
@@ -17,6 +19,9 @@ const App = () => {
     if(event.key ==='Enter'){
     searchQuery();
     }
+  }
+  const toggleShowGallery = ()=>{
+    setShowGallery(!showGallery);
   }
   return (
     <div className="App">
@@ -30,9 +35,15 @@ const App = () => {
       <hr/>
       <Tasks/>
       <hr/>
-      <Gallery />
+      {
+        showGallery? <Gallery /> : null
+
+      }
+      <button onClick={toggleShowGallery}>{showGallery? 'Hide Gallery' : 'Show Gallery' }</button>
       <hr />
       <Stories/>
+      <hr />
+      <Matrix /> 
     </div>
   );
 }
