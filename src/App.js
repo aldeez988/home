@@ -9,7 +9,6 @@ const App = () => {
   const [userQuery, setUserQuery] = useState('');
   const [showGallery, setShowGallery] = useState(true);
   const updateUserQuery = event => {
-    console.log('userQuery', userQuery);
     setUserQuery(event.target.value);
   }
   const searchQuery = () => {
