@@ -43,18 +43,17 @@ localStorage.setItem(
 
 const readStoredTasks = ()=>{
     const taskMap = JSON.parse(localStorage.getItem(TASKS_STORAGE_KEY)); 
-    return taskMap ? taskMap : {tasks: [], completedTasks: []};
+    return taskMap ? taskMap : initialTaskState;
 };
 function Tasks() {
     const [taskText, setTaskText] = useState('');
     const storedTasks = readStoredTasks();
-    const [tasks, setTasks] = useState(storedTasks.tasks);
-    const [completedTasks, setCompletedTasks] = useState(storedTasks.completedTasks);
-    const [state, dispatch] = useReducer(tasksReducer, initialTaskState);
+    const [state, dispatch] = useReducer(tasksReducer, storedTasks);
+    const {tasks, completedTasks} = state;
     
     console.log('>>>>>>>><<<<<<<<<<<<<<<<', state);
     useEffect(()=>{
-        storeTasks({tasks, completedTasks});
+        storeTasks(state);
     });
     const updateTaskText = (e) => {
         setTaskText(e.target.value)
@@ -62,20 +61,14 @@ function Tasks() {
     const addTask = () => {
         const task = {taskText, id: uuid()}
         dispatch({type: TYPES.ADD_TASK, task});
-
-        setTasks([...tasks, task]);
     }
     
     const completeTask = completedTask =>()=>{
         dispatch({type: TYPES.COMPLETE_TASK, completedTask});
-
-        setCompletedTasks([...completedTasks, completedTask])
-        setTasks(tasks.filter(task=> task.id !== completedTask.id))
     }
 
     const deleteTask = deletedTask =>()=>{
         dispatch({type: TYPES.DELETE_TASK, deletedTask})
-        setCompletedTasks(completedTasks.filter(task=> task.id !== deletedTask.id))
     }
     return (
         <div>
